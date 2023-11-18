@@ -1,0 +1,10 @@
+.debugIcon {
+  transition: stroke 1s;
+}
+
+.disabledDebug {
+  stroke: #ff0000;
+}
+.enabledDebug {
+  stroke: #1eff00;
+}
