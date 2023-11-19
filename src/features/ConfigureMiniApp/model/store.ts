@@ -67,7 +67,7 @@ sample({
 	clock: getAccessTokenMiniAppFx.doneData,
 	fn: (response) => {
 		// FIXME: note pure fix
-		toast.success(`MiniApp: ${response.miniAppName}, access token installed`);
+		toast.success(`MiniApp: ${response.miniAppName}, access token installed. Reload this page`);
 
 		return response;
 	},
@@ -78,7 +78,7 @@ sample({
 	clock: getAccessTokenMiniAppFx.failData,
 	fn: ({ event, status }) => {
 		// FIXME: note pure fix
-		toast.error(`Error status code: ${status}, event: ${event}. Reload this page`);
+		toast.error(`Error status code: ${status}, event: ${event}`);
 
 		return status;
 	},
