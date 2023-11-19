@@ -27,7 +27,7 @@ export const customizeVkHeader = () => {
 
 	let lastScrollY = 0;
 
-	const scrollHandle = debounce(() => {
+	const scrollHandler = debounce(() => {
 		if (lastScrollY > scrollY) {
 			header.style.setProperty('opacity', '1');
 		}
@@ -39,5 +39,5 @@ export const customizeVkHeader = () => {
 		lastScrollY = scrollY;
 	}, 150);
 
-	document.addEventListener('scroll', scrollHandle);
+	document.addEventListener('scroll', scrollHandler);
 };
