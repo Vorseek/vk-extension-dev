@@ -16,8 +16,14 @@
 
 	"content_scripts": [
 		{
-			"matches": ["https://*.vk.com/*", "https://vk.com/*", "https://*.mvk.com/*"],
-			"js": ["js/vendor.js", "js/vk_top_panel.js"]
+			"matches": [
+				"https://*.vk.com/*",
+				"https://vk.com/*",
+				"https://*.mvk.com/*",
+				"http://localhost:10888/*"
+			],
+			"js": ["js/vendor.js", "js/vk_top_panel.js"],
+			"exclude_matches": ["https://gitlab.mvk.com/*"]
 		}
 	],
 

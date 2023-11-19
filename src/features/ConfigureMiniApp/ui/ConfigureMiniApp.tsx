@@ -7,7 +7,7 @@ export const ConfigureMiniApp = () => {
 
 	return (
 		<button title="Get MiniApp access token" onClick={handleButtonClick}>
-			Mini
+			MiniApp Auth
 		</button>
 	);
 };
