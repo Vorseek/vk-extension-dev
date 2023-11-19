@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
 
-import { CHROME_RUNTIME_EVENT, TOP_PANEL_ID } from '../shared/const';
 import { VkTopPanel } from '../widgets/VkTopPanel';
 import { setStormDebugCookie } from '../features/DebugMode';
+import { customizeVkHeader } from '../features/CustomizeVkHeader/model/utils/customizeVkHeader';
 import { assertUnreachable } from '../shared/utils/assertUnreachable';
+import { CHROME_RUNTIME_EVENT, TOP_PANEL_ID } from '../shared/const';
 import { type RuntimeEvents, type WorkerMessages } from '../shared/types';
 
 try {
@@ -34,6 +35,8 @@ try {
 	});
 
 	chrome.runtime.sendMessage<RuntimeEvents>(CHROME_RUNTIME_EVENT.xDebugSession);
+
+	customizeVkHeader();
 } catch (error) {
 	console.log(error);
 }
