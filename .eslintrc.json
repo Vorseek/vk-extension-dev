@@ -27,7 +27,11 @@
 				"@typescript-eslint/non-nullable-type-assertion-style": "off",
 				"@typescript-eslint/object-curly-spacing": "off",
 				"no-useless-escape": "off",
-				"@typescript-eslint/naming-convention": "off"
+				"@typescript-eslint/naming-convention": "off",
+				"@typescript-eslint/ban-types": "off",
+				"@typescript-eslint/indent": "off",
+				"@typescript-eslint/no-restricted-imports": "off",
+				"object-shorthand": "off"
 			}
 		}
 	],
