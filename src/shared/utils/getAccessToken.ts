@@ -1,15 +1,17 @@
+import { type ResponseMiniAppAccessToken } from '../../features/ConfigureMiniApp';
 import { RESPONSE_MINI_APP_ACCESS_TOKEN } from '../const';
-import { type ResponseMiniAppAccessToken } from '../../features/ConfigureMiniApp/model/types';
 
 type Params = {
 	url?: string;
+	miniAppName?: string | null;
 	sendResponse: (response: ResponseMiniAppAccessToken) => void;
 };
 
-const DEFAULT_MINI_APP = 'market_item_create';
-const RESPONSE_URL = '';
+const DEFAULT_MINI_APP = process.env.DEFAULT_MINI_APP as string;
+const RESPONSE_URL = process.env.RESPONSE_URL_MINI_APP_AUTHORIZATION;
+const ACCESS_TOKEN_ACT = process.env.ACCESS_TOKEN_ACT;
 
-const getMiniAppName = (url?: string) => {
+export const getMiniAppName = (url?: string | null) => {
 	if (!url) return DEFAULT_MINI_APP;
 
 	const { pathname } = new URL(url);
@@ -24,10 +26,10 @@ const getMiniAppName = (url?: string) => {
 /*
  * For usage in worker
  * */
-export const getAccessToken = async ({ url, sendResponse }: Params) => {
-	const miniAppName = getMiniAppName(url);
+export const getAccessToken = async ({ url, sendResponse, miniAppName }: Params) => {
+	const name = miniAppName ? miniAppName : getMiniAppName(url);
 
-	const response = await fetch(`${RESPONSE_URL}?act=vkui_access_token&name=${miniAppName}`);
+	const response = await fetch(`${RESPONSE_URL}?act=${ACCESS_TOKEN_ACT}&name=${name}`);
 
 	if (!response.ok) {
 		sendResponse({
@@ -41,6 +43,6 @@ export const getAccessToken = async ({ url, sendResponse }: Params) => {
 	sendResponse({
 		event: RESPONSE_MINI_APP_ACCESS_TOKEN.miniAppAccessToken,
 		accessToken,
-		miniAppName,
+		miniAppName: name,
 	});
 };

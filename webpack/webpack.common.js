@@ -2,12 +2,15 @@ const path = require('path');
 
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+
 const srcDir = path.join(__dirname, '..', 'src');
 
 module.exports = {
 	entry: {
-		vk_top_panel: path.join(srcDir, '/entrypoints/vk_top_panel.tsx'),
 		background_worker: path.join(srcDir, '/entrypoints/background_worker.ts'),
+		popup: path.join(srcDir, '/entrypoints/popup.tsx'),
+		all_page: path.join(srcDir, '/entrypoints/all_page.ts'),
 	},
 	output: {
 		path: path.join(__dirname, '../dist/js'),
@@ -38,6 +41,9 @@ module.exports = {
 		extensions: ['.ts', '.tsx', '.js'],
 	},
 	plugins: [
+		new Dotenv({
+			path: path.join(__dirname, '../.env'),
+		}),
 		new CopyPlugin({
 			patterns: [{ from: '.', to: '../', context: 'public' }],
 			options: {},

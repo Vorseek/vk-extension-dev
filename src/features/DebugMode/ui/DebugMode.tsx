@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useStore } from 'effector-react';
 
-import { BugIcon } from '../../../shared/ui/icon/BugIcon';
 import { $stormDebugCookie, toggleStormDebugCookie } from '../';
+import { BugIcon } from '../../../shared/components/icon/BugIcon';
 
 import styles from './DebugMode.module.css';
 

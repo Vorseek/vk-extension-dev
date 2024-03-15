@@ -11,3 +11,5 @@ export type MiniAppAccessTokenError = {
 };
 
 export type ResponseMiniAppAccessToken = MiniAppAccessTokenSuccess | MiniAppAccessTokenError;
+
+export type GetAccessTokenParams = { miniAppName: string | null };

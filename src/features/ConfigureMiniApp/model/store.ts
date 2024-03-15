@@ -1,31 +1,32 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { toast } from 'react-toastify';
 
 import { type RuntimeEvents } from '../../../shared/types';
 import { CHROME_RUNTIME_EVENT, RESPONSE_MINI_APP_ACCESS_TOKEN } from '../../../shared/const';
 import { assertUnreachable } from '../../../shared/utils/assertUnreachable';
+import { $currentTabId } from '../../../widgets/Popup';
+import { openSnackbar } from '../../../shared/components/Snackbar/model/store';
+import { $currentMiniAppName } from '../../AuthorizationMiniApp/model/store';
 
 import {
+	type GetAccessTokenParams,
 	type MiniAppAccessTokenError,
 	type MiniAppAccessTokenSuccess,
 	type ResponseMiniAppAccessToken,
 } from './types';
 
-const DEFAULT_API_URL = '';
-
 export const configureMiniApp = createEvent();
 
 export const $configMiniAppError = createStore<number | null>(null);
 
-const getAccessTokenMiniAppFx = createEffect<
-	void,
+export const getAccessTokenMiniAppFx = createEffect<
+	GetAccessTokenParams,
 	MiniAppAccessTokenSuccess,
 	MiniAppAccessTokenError
 >(
-	async () =>
+	async ({ miniAppName }) =>
 		new Promise<MiniAppAccessTokenSuccess>((resolve, reject) => {
-			chrome.runtime.sendMessage<RuntimeEvents, ResponseMiniAppAccessToken>(
-				CHROME_RUNTIME_EVENT.miniAppAccessToken,
+			chrome.runtime.sendMessage<RuntimeEvents<GetAccessTokenParams>, ResponseMiniAppAccessToken>(
+				{ event: CHROME_RUNTIME_EVENT.miniAppAccessToken, payload: { miniAppName } },
 				(response) => {
 					switch (response.event) {
 						case RESPONSE_MINI_APP_ACCESS_TOKEN.miniAppAccessToken: {
@@ -48,39 +49,36 @@ const getAccessTokenMiniAppFx = createEffect<
 		}),
 );
 
-const updateLocalStorageFx = createEffect(
-	({ miniAppName, accessToken }: MiniAppAccessTokenSuccess) => {
-		const apiHostKey = `${miniAppName}:api_host`;
-		const accessTokenKey = `${miniAppName}:access_token`;
-
-		localStorage.setItem(apiHostKey, DEFAULT_API_URL);
-		localStorage.setItem(accessTokenKey, accessToken);
+export const accessTokenDoneFx = createEffect(
+	({ tabId, response }: { tabId: number; response: MiniAppAccessTokenSuccess }) => {
+		chrome.tabs.sendMessage(tabId, response);
 	},
 );
 
 sample({
 	clock: configureMiniApp,
+	source: $currentMiniAppName,
+	fn: (miniAppName) => ({ miniAppName }),
 	target: getAccessTokenMiniAppFx,
 });
 
 sample({
 	clock: getAccessTokenMiniAppFx.doneData,
-	fn: (response) => {
-		// FIXME: note pure fix
-		toast.success(`MiniApp: ${response.miniAppName}, access token installed. Reload this page`);
-
-		return response;
-	},
-	target: updateLocalStorageFx,
+	source: $currentTabId,
+	fn: (tabId, response) => ({ tabId: tabId as number, response }),
+	target: accessTokenDoneFx,
 });
 
 sample({
-	clock: getAccessTokenMiniAppFx.failData,
-	fn: ({ event, status }) => {
-		// FIXME: note pure fix
-		toast.error(`Error status code: ${status}, event: ${event}`);
-
-		return status;
-	},
-	target: $configMiniAppError,
+	clock: getAccessTokenMiniAppFx.done,
+	fn: () => ({ text: 'Токен успешно установлен', severity: 'success' }) as const,
+	target: openSnackbar,
 });
+
+sample({
+	clock: getAccessTokenMiniAppFx.fail,
+	fn: () => ({ text: 'Не удалось установить токен', severity: 'error' }) as const,
+	target: openSnackbar,
+});
+
+export const $isAccessTokenLoading = getAccessTokenMiniAppFx.pending;

@@ -1,7 +1,0 @@
-* {
-  --vk-top-panel-height: 22px;
-}
-
-body, #page_header_cont, .vkuiFixedLayout {
-  margin-top: var(--vk-top-panel-height) !important;
-}

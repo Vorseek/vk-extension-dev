@@ -31,7 +31,11 @@
 				"@typescript-eslint/ban-types": "off",
 				"@typescript-eslint/indent": "off",
 				"@typescript-eslint/no-restricted-imports": "off",
-				"object-shorthand": "off"
+				"object-shorthand": "off",
+				"prefer-destructuring": "off",
+				"capitalized-comments": "off",
+				"@typescript-eslint/promise-function-async": "off",
+				"@typescript-eslint/prefer-nullish-coalescing": "off"
 			}
 		}
 	],
@@ -61,6 +65,7 @@
 				"ignoreDeclarationSort": true
 			}
 		],
-		"camelcase": "off"
+		"camelcase": "off",
+		"capitalized-comments": "off"
 	}
 }

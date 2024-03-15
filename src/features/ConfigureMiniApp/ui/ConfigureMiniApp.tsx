@@ -1,5 +1,9 @@
 import { configureMiniApp } from '../model/store';
 
+/*
+ * @deprecated
+ * @use AuthorizationMiniApp
+ * */
 export const ConfigureMiniApp = () => {
 	const handleButtonClick = () => {
 		configureMiniApp();
