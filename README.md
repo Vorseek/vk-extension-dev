@@ -4,6 +4,11 @@
 
 Chrome Extension, TypeScript
 
+## Functional
+  - Authorization miniApp (dev / staging)
+  - Configuration webpack watcher (entrypoints)
+  - Proxy (VIP)
+
 ## Prerequisites
 
 - [node + yarn](https://nodejs.org/) (Current Version)
